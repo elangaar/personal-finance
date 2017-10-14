@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %} Lista kategorii{% endblock title %} 
+
+{% block content %}
+	<h1> Lista kategorii </h1>
+	{% for e in object_list %}
+		<p> {{ e.name }}</p>
+	{% empty %}
+		<p> Brak kategorii </p>
+	{% endfor %}
+	<hr noshade>
+	<p> Ilość kategorii: {{ amount }} </p>
+{% endblock content %}

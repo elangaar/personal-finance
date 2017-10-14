@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %} Lista portfeli {% endblock title %} 
+
+{% block content %}
+	<h1> Lista portfeli </h1>
+	{% for e in object_list %}
+		<p> {{ e.name }}</p>
+	{% empty %}
+		<p> Brak portfeli </p>
+	{% endfor %}
+	<hr noshade>
+	<p> Ilość portfeli: {{ amount }} </p>
+{% endblock content %}

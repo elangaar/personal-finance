@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %} Lista źródeł dochodu {% endblock title %} 
+
+{% block content %}
+	<h1> Lista źródeł dochodu </h1>
+	{% for e in object_list %}
+	<p> {{ e.name }}  -  {{ e.type_of_income }}  -  {{ e.permanent }}
+	{% empty %}
+		<p> Brak źródeł dochodu </p>
+	{% endfor %}
+	<hr noshade>
+	<p> Suma źródeł dochodu: {{ amount }} </p>
+{% endblock content %}
