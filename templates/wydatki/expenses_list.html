@@ -5,7 +5,7 @@
 {% block content %}
 	<h1> Lista wydatków </h1>
 	{% for e in object_list %}
-	<p> {{ e.name }}  -  {{ e.category.name }}  -  {{ e.exp_date }} - {{ e.price }} - {{ e.pocket }} - {{ e.place }}</p>
+	<a href="{% url 'expense-detail' e.pk %}"> {{ e.name }} - {{ e.price }} </a> <br>
 	{% empty %}
 		<p> Brak wydatków </p>
 	{% endfor %}

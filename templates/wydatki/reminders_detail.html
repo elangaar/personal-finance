@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %} Przypomnienia - {{ object.name }} {% endblock title %}
+
+{% block content %}
+
+<h2> {{ object.name }} </h2>
+<p> {{ object.remind_date }} </p>
+<p> {{ object.as_before }} </p>
+<p> {{ object.message }} </p>
+<p> {{ object.importance }} </p>
+{% endblock content %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %} Portfele - {{ object.name }} {% endblock title %}
+
+{% block content %}
+
+<h2> {{ object.name }} </h2>
+<p> {{ object.limit }} </p>
+<p> {{ object.funds }} </p>
+{% endblock content %}

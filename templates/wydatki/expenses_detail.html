@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %} Wydatki - {{ object.name }} {% endblock title %}
+
+{% block content %}
+
+<h2> {{ object.name }} </h2>
+<p> Data: {{ object.exp_date }} </p>
+<p> Kategoria: {{ object.category }} </p>
+<p> Cena: {{ object.price }} </p>
+<p> Portfel: {{ object.pocket }} </p>
+<p> Miejsce: {{ object.place }} </p>
+<p> Przypomnienie: {{ object.reminder }} </p>
+
+{% endblock content %}

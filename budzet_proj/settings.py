@@ -74,21 +74,21 @@ WSGI_APPLICATION = 'budzet_proj.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-## DATABASES = {
-##     'default': {
-##         'ENGINE': 'django.db.backends.sqlite3',
-##         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-##     }
-## }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.oracle',
-        'NAME': '192.168.1.2:1521/orclpdb.localdomain',
-        'USER': 'budzet',
-        'PASSWORD': 'passwd',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+## DATABASES = {
+##     'default': {
+##         'ENGINE': 'django.db.backends.oracle',
+##         'NAME': '192.168.1.2:1521/orclpdb.localdomain',
+##         'USER': 'budzet',
+##         'PASSWORD': 'passwd',
+##     }
+## }
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators

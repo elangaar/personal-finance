@@ -2,3 +2,5 @@
 *.pyc
 *.pyo
 *.swo
+db.sqlite3
+wydatki/migrations/*

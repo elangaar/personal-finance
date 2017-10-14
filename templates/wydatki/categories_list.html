@@ -5,7 +5,7 @@
 {% block content %}
 	<h1> Lista kategorii </h1>
 	{% for e in object_list %}
-		<p> {{ e.name }}</p>
+		<a href="{% url 'category-detail' e.pk %}"> {{ e.name }}</a>
 	{% empty %}
 		<p> Brak kategorii </p>
 	{% endfor %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %} Źródła dochodów - {{ object.name }} {% endblock title %}
+
+{% block content %}
+
+<h2> {{ object.name }} </h2>
+<p> {{ object.type_of_income }} </p>
+<p> {{ object.permanent }} </p>
+{% endblock content %}

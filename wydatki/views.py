@@ -1,12 +1,14 @@
 import logging
+logging.basicConfig(level=logging.DEBUG)
 
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.urls import reverse
 
 from django.views.generic.base import TemplateView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
 
 from django.db.models import Sum
 
@@ -26,7 +28,8 @@ class ExpenseListView(ListView):
     def get_context_data(self, **kwargs):
         context = super(ExpenseListView, self).get_context_data(**kwargs)
         sum_value = Expenses.objects.aggregate(Sum('price'))
-        context['sum'] = float(sum_value['price__sum'])
+        if sum_value['price__sum'] != None:
+            context['sum'] = float(sum_value['price__sum'])
         return context
 
 
@@ -35,6 +38,18 @@ class ExpenseCreateView(CreateView):
     fields = ['name', 'exp_date', 'category', 'price', 'pocket', 'place'] # 'reminder'
     
     def get_success_url(self):
+        return reverse('expense-list')
+
+
+class ExpenseDetailView(DetailView):
+    model = Expenses
+
+
+class ExpenseUpdateView(UpdateView):
+    model = Expenses
+    fields = ['name', 'exp_date', 'category', 'price', 'pocket', 'place'] # 'reminder'
+    
+    def get_success_url(self):              # change to expense-detail
         return reverse('expense-list')
 
 
@@ -55,6 +70,10 @@ class CategoryCreateView(CreateView):
         return reverse('category-list')
 
 
+class CategoryDetailView(DetailView):
+    model = Categories
+
+
 class PocketListView(ListView):
     model = Pockets
 
@@ -71,6 +90,11 @@ class PocketCreateView(CreateView):
     def get_success_url(self):
         return reverse('pocket-list')
 
+
+class PocketDetailView(DetailView):
+    model = Pockets
+
+
 class PlaceListView(ListView):
     model = Places
     def get_context_data(self, **kwargs):
@@ -85,6 +109,11 @@ class PlaceCreateView(CreateView):
 
     def get_success_url(self):
         return reverse('place-list')
+
+
+class PlaceDetailView(DetailView):
+    pass
+
 
 class ReminderListView(ListView):
     model = Reminders
@@ -103,14 +132,18 @@ class ReminderCreateView(CreateView):
         return reverse('reminder-list')
 
 
+class ReminderDetailView(DetailView):
+    model = Reminders
+
+
 class IncomeListView(ListView):
     model = Incomes
 
     def get_context_data(self, **kwargs):
         context = super(IncomeListView, self).get_context_data(**kwargs)
         sum_value = Incomes.objects.aggregate(Sum('amount'))
-        logging.warning(sum_value)
-        context['sum'] = float(sum_value['amount__sum'])
+        if sum_value['amount__sum'] != None:
+            context['sum'] = float(sum_value['amount__sum'])
         return context
 
 
@@ -122,6 +155,10 @@ class IncomeCreateView(CreateView):
         return reverse('income-list')
 
 
+class IncomeDetailView(DetailView):
+    model = Incomes
+
+
 class IncomeSourceListView(ListView):
     model = IncomesSources
 
@@ -130,6 +167,7 @@ class IncomeSourceListView(ListView):
         context['amount'] = IncomesSources.objects.count()
         return context
 
+
 class IncomeSourceCreateView(CreateView):
     model = IncomesSources
     fields = ['name', 'type_of_income', 'permanent']
@@ -137,3 +175,6 @@ class IncomeSourceCreateView(CreateView):
     def get_success_url(self):
         return reverse('income-source-list')
 
+
+class IncomeSourceDetailView(DetailView):
+    model = IncomesSources
