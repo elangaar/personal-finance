@@ -9,4 +9,6 @@
 <p> {{ object.as_before }} </p>
 <p> {{ object.message }} </p>
 <p> {{ object.importance }} </p>
+<p><a href="{% url 'reminder-update' object.pk %}"> Edytuj </a></p>
+<p><a href="{% url 'reminder-delete' object.pk %}"> Usuń </a></p>
 {% endblock content %}

@@ -5,10 +5,11 @@
 {% block content %}
 	<h1> Lista wydatków </h1>
 	{% for e in object_list %}
-	<a href="{% url 'expense-detail' e.pk %}"> {{ e.name }} - {{ e.price }} </a> <br>
+		<a href="{% url 'expense-detail' e.pk %}"> {{ e.name }} - {{ e.price }} </a> <br>
 	{% empty %}
 		<p> Brak wydatków </p>
 	{% endfor %}
 	<hr noshade>
 	<p> Suma wydatków: {{ sum }} </p>
+	<a href="{% url 'expense-add' %}"> Dodaj wydatek </a></br>
 {% endblock content %}

@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from datetime import date
 
 # Create your models here.
 
@@ -23,7 +24,7 @@ class Reminders(models.Model):
     remind_date = models.DateField()
     as_before= models.DateField()
     message= models.CharField(max_length=100)
-    importance= models.CharField(max_length=1, choices=PRIORITIES)
+    importance= models.CharField(max_length=2, choices=PRIORITIES)
 
     def __str__(self):
         return self.name
@@ -44,6 +45,7 @@ class IncomesSources(models.Model):
 class Incomes(models.Model):
     source = models.ForeignKey(IncomesSources)
     amount = models.DecimalField(max_digits=9, decimal_places=2)
+    income_date = models.DateField(default=date.today)
 
     def __str__(self):
         return self.source
@@ -68,7 +70,7 @@ class Places(models.Model):
 
 class Expenses(models.Model):
     name = models.CharField(max_length=40)
-    exp_date = models.DateField()
+    exp_date = models.DateField(default=date.today)
     category = models.ForeignKey(Categories, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=9, decimal_places=2)
     pocket = models.ForeignKey(Pockets, on_delete=models.CASCADE)

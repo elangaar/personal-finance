@@ -6,4 +6,8 @@
 
 <h2> {{ object.source }} </h2>
 <p> {{ object.amount }} </p>
+<p> {{ object.income_date }} </p>
+
+<p><a href="{% url 'income-update' object.pk %}"> Edytuj </a></p>
+<p><a href="{% url 'income-delete' object.pk %}"> Usuń</a></p>
 {% endblock content %}

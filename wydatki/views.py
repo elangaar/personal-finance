@@ -3,10 +3,10 @@ logging.basicConfig(level=logging.DEBUG)
 
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 
 from django.views.generic.base import TemplateView
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 
@@ -33,6 +33,10 @@ class ExpenseListView(ListView):
         return context
 
 
+class ExpenseDetailView(DetailView):
+    model = Expenses
+
+
 class ExpenseCreateView(CreateView):
     model = Expenses
     fields = ['name', 'exp_date', 'category', 'price', 'pocket', 'place'] # 'reminder'
@@ -41,16 +45,20 @@ class ExpenseCreateView(CreateView):
         return reverse('expense-list')
 
 
-class ExpenseDetailView(DetailView):
-    model = Expenses
-
-
 class ExpenseUpdateView(UpdateView):
     model = Expenses
     fields = ['name', 'exp_date', 'category', 'price', 'pocket', 'place'] # 'reminder'
+    template_name_suffix='_update_form'
     
     def get_success_url(self):              # change to expense-detail
         return reverse('expense-list')
+
+
+class ExpenseDeleteView(DeleteView):
+    model = Expenses
+    template_name='wydatki/confirm_delete.html'
+    success_url = reverse_lazy('expense-list')
+
 
 
 class CategoryListView(ListView):
@@ -62,6 +70,10 @@ class CategoryListView(ListView):
         return context
 
 
+class CategoryDetailView(DetailView):
+    model = Categories
+
+
 class CategoryCreateView(CreateView):
     model = Categories
     fields = ['name']
@@ -70,8 +82,19 @@ class CategoryCreateView(CreateView):
         return reverse('category-list')
 
 
-class CategoryDetailView(DetailView):
+class CategoryUpdateView(UpdateView):
     model = Categories
+    fields = ['name']
+    template_name_suffix='_update_form'
+
+    def get_success_url(self):
+        return reverse('income-source-list')
+
+
+class CategoryDeleteView(DeleteView):
+    model = Categories
+    template_name='wydatki/confirm_delete.html'
+    success_url = reverse_lazy('category-list')
 
 
 class PocketListView(ListView):
@@ -83,6 +106,10 @@ class PocketListView(ListView):
         return context
 
 
+class PocketDetailView(DetailView):
+    model = Pockets
+
+
 class PocketCreateView(CreateView):
     model = Pockets
     fields = ['name', 'limit', 'funds']
@@ -91,8 +118,19 @@ class PocketCreateView(CreateView):
         return reverse('pocket-list')
 
 
-class PocketDetailView(DetailView):
+class PocketUpdateView(UpdateView):
     model = Pockets
+    fields = ['name', 'limit', 'funds']
+    template_name_suffix='_update_form'
+    
+    def get_success_url(self):
+        return reverse('pocket-list')
+
+
+class PocketDeleteView(DeleteView):
+    model = Pockets
+    template_name='wydatki/confirm_delete.html'
+    success_url = reverse_lazy('pocket-list')
 
 
 class PlaceListView(ListView):
@@ -103,6 +141,10 @@ class PlaceListView(ListView):
         return context
 
 
+class PlaceDetailView(DetailView):
+    model = Places
+
+
 class PlaceCreateView(CreateView):
     model = Places
     fields = ['name']
@@ -111,8 +153,19 @@ class PlaceCreateView(CreateView):
         return reverse('place-list')
 
 
-class PlaceDetailView(DetailView):
-    pass
+class PlaceUpdateView(UpdateView):
+    model = Places
+    fields = ['name']
+    template_name_suffix='_update_form'
+
+    def get_success_url(self):
+        return reverse('place-list')
+
+
+class PlaceDeleteView(DeleteView):
+    model = Places
+    template_name='wydatki/confirm_delete.html'
+    success_url = reverse_lazy('place-list')
 
 
 class ReminderListView(ListView):
@@ -124,16 +177,31 @@ class ReminderListView(ListView):
         return context
 
 
+class ReminderDetailView(DetailView):
+    model = Reminders
+
+
 class ReminderCreateView(CreateView):
     model = Reminders
-    fields = ['remind_date', 'as_before', 'message', 'importance']
+    fields = ['name', 'remind_date', 'as_before', 'message', 'importance']
 
     def get_success_url(self):
         return reverse('reminder-list')
 
 
-class ReminderDetailView(DetailView):
+class ReminderUpdateView(UpdateView):
     model = Reminders
+    fields = ['name', 'remind_date', 'as_before', 'message', 'importance']
+    template_name_suffix='_update_form'
+
+    def get_success_url(self):
+        return reverse('reminder-list')
+
+
+class ReminderDeleteView(DeleteView):
+    model = Reminders
+    template_name='wydatki/confirm_delete.html'
+    success_url = reverse_lazy('reminder-list')
 
 
 class IncomeListView(ListView):
@@ -147,16 +215,31 @@ class IncomeListView(ListView):
         return context
 
 
+class IncomeDetailView(DetailView):
+    model = Incomes
+
+
 class IncomeCreateView(CreateView):
     model = Incomes
-    fields = ['source', 'amount']
+    fields = ['source', 'amount', 'income_date']
 
     def get_success_url(self):
         return reverse('income-list')
 
 
-class IncomeDetailView(DetailView):
+class IncomeUpdateView(UpdateView):
     model = Incomes
+    fields = ['source', 'amount']
+    template_name_suffix='_update_form'
+
+    def get_success_url(self):
+        return reverse('income-list')
+
+
+class IncomeDeleteView(DeleteView):
+    model = Incomes
+    template_name='wydatki/confirm_delete.html'
+    success_url = reverse_lazy('income-list')
 
 
 class IncomeSourceListView(ListView):
@@ -168,6 +251,10 @@ class IncomeSourceListView(ListView):
         return context
 
 
+class IncomeSourceDetailView(DetailView):
+    model = IncomesSources
+
+
 class IncomeSourceCreateView(CreateView):
     model = IncomesSources
     fields = ['name', 'type_of_income', 'permanent']
@@ -176,5 +263,16 @@ class IncomeSourceCreateView(CreateView):
         return reverse('income-source-list')
 
 
-class IncomeSourceDetailView(DetailView):
+class IncomeSourceUpdateView(UpdateView):
     model = IncomesSources
+    fields = ['name', 'type_of_income', 'permanent']
+    template_name_suffix='_update_form'
+
+    def get_success_url(self):
+        return reverse('income-source-list')
+
+
+class IncomeSourceDeleteView(DeleteView):
+    model = IncomesSources
+    template_name='wydatki/confirm_delete.html'
+    success_url = reverse_lazy('income-source-list')

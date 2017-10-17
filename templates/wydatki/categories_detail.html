@@ -5,5 +5,7 @@
 {% block content %}
 
 <h2> {{ object.name }} </h2>
+<p><a href="{% url 'category-update' object.pk %}"> Edytuj </a></p>
+<p><a href="{% url 'category-delete' object.pk %}"> Usuń</a></p>
 
 {% endblock content %}

@@ -12,4 +12,7 @@
 <p> Miejsce: {{ object.place }} </p>
 <p> Przypomnienie: {{ object.reminder }} </p>
 
+<p><a href="{% url 'expense-update' object.pk %}"> Edytuj </a></p>
+<p><a href="{% url 'expense-delete' object.pk %}"> Usuń </a></p>
+
 {% endblock content %}

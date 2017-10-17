@@ -5,10 +5,11 @@
 {% block content %}
 	<h1> Lista dochodów </h1>
 	{% for e in object_list %}
-		<p> {{ e.source }} - {{ e.amount }} </p>
+	<p> <a href="{% url 'income-detail' e.pk %}"> {{ e.source }} - {{ e.amount }} </a></p>
 	{% empty %}
 		<p> Brak dochodów </p>
 	{% endfor %}
 	<hr noshade>
 	<p> Suma dochodów: {{ sum }} </p>
+	<a href="{% url 'income-add' %}"> Dodaj dochód</a></br>
 {% endblock content %}

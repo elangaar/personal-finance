@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.MainView.as_view(), name='index'),
-    url(r'^list/general/$', views.ExpenseListView.as_view(), name='expense-list'),
+    url(r'^list/expenses/$', views.ExpenseListView.as_view(), name='expense-list'),
     url(r'^list/categories/$', views.CategoryListView.as_view(), name='category-list'),
     url(r'^list/pockets/$', views.PocketListView.as_view(), name='pocket-list'),
     url(r'^list/places/$', views.PlaceListView.as_view(), name='place-list'),
@@ -29,5 +29,19 @@ urlpatterns = [
     url(r'^pocket/(?P<pk>[\d+])/$', views.PocketDetailView.as_view(), name='pocket-detail'),
     url(r'^place/(?P<pk>[\d+])/$', views.PlaceDetailView.as_view(), name='place-detail'),
 
-    url(r'^update/expense/$', views.ExpenseUpdateView.as_view(), name='expense-update'),
+    url(r'^update/expense/(?P<pk>[\d+])/$', views.ExpenseUpdateView.as_view(), name='expense-update'),
+    url(r'^update/category/(?P<pk>[\d+])/$', views.CategoryUpdateView.as_view(), name='category-update'),
+    url(r'^update/reminder/(?P<pk>[\d+])/$', views.ReminderUpdateView.as_view(), name='reminder-update'),
+    url(r'^update/incomesource/(?P<pk>[\d+])/$', views.IncomeSourceUpdateView.as_view(), name='income-source-update'),
+    url(r'^update/income/(?P<pk>[\d+])/$', views.IncomeUpdateView.as_view(), name='income-update'),
+    url(r'^update/pocket/(?P<pk>[\d+])/$', views.PocketUpdateView.as_view(), name='pocket-update'),
+    url(r'^update/place/(?P<pk>[\d+])/$', views.PlaceUpdateView.as_view(), name='place-update'),
+    
+    url(r'^delete/expense/(?P<pk>[\d+])/$', views.ExpenseDeleteView.as_view(), name='expense-delete'),
+    url(r'^delete/category/(?P<pk>[\d+])/$', views.CategoryDeleteView.as_view(), name='category-delete'),
+    url(r'^delete/reminder/(?P<pk>[\d+])/$', views.ReminderDeleteView.as_view(), name='reminder-delete'),
+    url(r'^delete/incomesource/(?P<pk>[\d+])/$', views.IncomeDeleteView.as_view(), name='income-source-delete'),
+    url(r'^delete/income/(?P<pk>[\d+])/$', views.IncomeDeleteView.as_view(), name='income-delete'),
+    url(r'^delete/pocket/(?P<pk>[\d+])/$', views.PocketDeleteView.as_view(), name='pocket-delete'),
+    url(r'^delete/place/(?P<pk>[\d+])/$', views.PlaceDeleteView.as_view(), name='place-delete'),
 ]

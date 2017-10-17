@@ -7,4 +7,6 @@
 <h2> {{ object.name }} </h2>
 <p> {{ object.type_of_income }} </p>
 <p> {{ object.permanent }} </p>
+<p><a href="{% url 'income-source-update' object.pk %}"> Edytuj </a></p>
+<p><a href="{% url 'income-source-delete' object.pk %}"> Usuń</a></p>
 {% endblock content %}

@@ -5,10 +5,11 @@
 {% block content %}
 	<h1> Lista miejsc </h1>
 	{% for e in object_list %}
-		<p> {{ e.name }} </p>
+	<p><a href="{% url 'place-detail' e.pk %}"> {{ e.name }} </a></p>
 	{% empty %}
 		<p> Brak miejsc </p>
 	{% endfor %}
 	<hr noshade>
 	<p> Ilość miejsc: {{ amount }} </p>
+	<a href="{% url 'place-add' %}"> Dodaj miejsce</a></br>
 {% endblock content %}
