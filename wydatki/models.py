@@ -1,20 +1,19 @@
-from django.db import models
-from django.urls import reverse
 from datetime import date
 
-# Create your models here.
+from django.contrib.auth.models import User
+from django.db import models
+from django.urls import reverse
 
-class Categories(models.Model):
+
+class Category(models.Model):
     name = models.CharField(max_length=40)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
 
     def __str__ (self):
         return self.name
 
-#    def get_absolute_url(self):
-#        return reverse('category-list')
 
-
-class Reminders(models.Model):
+class Reminder(models.Model):
     PRIORITIES= (
         ('BW', 'Bardzo ważny'),
         ('W', 'Ważny'),
@@ -25,57 +24,59 @@ class Reminders(models.Model):
     as_before= models.DateField()
     message= models.CharField(max_length=100)
     importance= models.CharField(max_length=2, choices=PRIORITIES)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
 
     def __str__(self):
         return self.name
 
-#    def get_absolute_url(self):
-#        return reverse('reminder-list')
 
-
-class IncomesSources(models.Model):
+class IncomeSource(models.Model):
     name = models.CharField(max_length=40)
     type_of_income = models.CharField(max_length=20)
     permanent = models.BooleanField()
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
 
     def __str__(self):
         return self.name + ' - ' + self.type_of_income
 
 
-class Incomes(models.Model):
-    source = models.ForeignKey(IncomesSources)
+class Income(models.Model):
+    source = models.ForeignKey(IncomeSource)
     amount = models.DecimalField(max_digits=9, decimal_places=2)
     income_date = models.DateField(default=date.today)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
 
     def __str__(self):
         return self.source
 
 
-class Pockets(models.Model):
+class Pocket(models.Model):
     name = models.CharField(max_length=40)
     limit = models.DecimalField(max_digits=9, decimal_places=2)
     funds= models.DecimalField(max_digits=9, decimal_places=2)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
 
     def __str__(self):
         return self.name
 
 
-
-class Places(models.Model):
+class Place(models.Model):
     name= models.CharField(max_length=40)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
 
     def __str__(self):
         return self.name
 
 
-class Expenses(models.Model):
+class Expense(models.Model):
     name = models.CharField(max_length=40)
     exp_date = models.DateField(default=date.today)
-    category = models.ForeignKey(Categories, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=9, decimal_places=2)
-    pocket = models.ForeignKey(Pockets, on_delete=models.CASCADE)
-    place = models.ForeignKey(Places, on_delete=models.CASCADE)
-    reminder = models.ForeignKey(Reminders, on_delete=models.CASCADE, null=True)
+    pocket = models.ForeignKey(Pocket, on_delete=models.CASCADE)
+    place = models.ForeignKey(Place, on_delete=models.CASCADE)
+    reminder = models.ForeignKey(Reminder, on_delete=models.CASCADE, null=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
 
     def __str__(self):
         return self.name
