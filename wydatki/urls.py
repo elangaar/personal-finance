@@ -5,8 +5,6 @@ from . import views
 urlpatterns = [
     url(r'^$', views.MainView.as_view(), name='index'),
     url(r'^list/expenses/$', views.ExpenseListView.as_view(), name='expense-list'),
-    url(r'^list/expenses/user/', views.ExpenseUserListView.as_view(),
-    name='my-expense-list' ),
     url(r'^list/categories/$', views.CategoryListView.as_view(), name='category-list'),
     url(r'^list/pockets/$', views.PocketListView.as_view(), name='pocket-list'),
     url(r'^list/places/$', views.PlaceListView.as_view(), name='place-list'),

@@ -1,7 +1,6 @@
 import logging
 logging.basicConfig(level=logging.DEBUG)
 
-from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 
 from django.contrib.auth.models import User
@@ -25,17 +24,6 @@ class MainView(TemplateView):
 
 class ExpenseListView(LoginRequiredMixin, ListView):
     model = Expense
-    
-    def get_context_data(self, **kwargs):
-        context = super(ExpenseListView, self).get_context_data(**kwargs)
-        sum_value = Expense.objects.aggregate(Sum('price'))
-        if sum_value['price__sum'] != None:
-            context['sum'] = float(sum_value['price__sum'])
-        return context
-
-
-class ExpenseUserListView(LoginRequiredMixin, ListView):
-    model = Expense
     template_name='wydatki/my_expense_list.html'
     paginate_by = 10
 
@@ -43,7 +31,7 @@ class ExpenseUserListView(LoginRequiredMixin, ListView):
         return Expense.objects.filter(owner=self.request.user).order_by('exp_date')
     
     def get_context_data(self, **kwargs):
-        context = super(ExpenseUserListView, self).get_context_data(**kwargs)
+        context = super(ExpenseListView, self).get_context_data(**kwargs)
         sum_value = self.get_queryset().aggregate(Sum('price'))
         if sum_value['price__sum'] != None:
             context['sum'] = float(sum_value['price__sum'])
@@ -93,7 +81,7 @@ class CategoryListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super(CategoryListView, self).get_context_data(**kwargs)
-        context['amount'] = Category.objects.count()
+        context['amount'] = self.get_queryset().objects.count()
         return context
 
 
@@ -140,7 +128,7 @@ class PocketListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super(PocketListView, self).get_context_data(**kwargs)
-        context['amount'] = Pocket.objects.count()
+        context['amount'] = self.get_queryset().count()
         return context
 
 
@@ -185,7 +173,7 @@ class PlaceListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super(PlaceListView, self).get_context_data(**kwargs)
-        context['amount'] = Place.objects.count()
+        context['amount'] = self.get_queryset().count()
         return context
 
 
@@ -230,7 +218,7 @@ class ReminderListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ReminderListView, self).get_context_data(**kwargs)
-        context['amount'] = Reminder.objects.count()
+        context['amount'] = self.get_queryset().count()
         return context
 
 
@@ -275,7 +263,7 @@ class IncomeListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super(IncomeListView, self).get_context_data(**kwargs)
-        sum_value = Income.objects.aggregate(Sum('amount'))
+        sum_value = self.get_queryset().aggregate(Sum('amount'))
         if sum_value['amount__sum'] != None:
             context['sum'] = float(sum_value['amount__sum'])
         return context
@@ -322,7 +310,7 @@ class IncomeSourceListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super(IncomeSourceListView, self).get_context_data(**kwargs)
-        context['amount'] = IncomeSource.objects.count()
+        context['amount'] = self.get_queryset().count()
         return context
 
 
