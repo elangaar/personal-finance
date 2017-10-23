@@ -2,7 +2,7 @@ from datetime import date
 
 from django.contrib.auth.models import User
 from django.db import models
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 
 
 class Category(models.Model):
@@ -11,6 +11,9 @@ class Category(models.Model):
 
     def __str__ (self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('category-detail', args=[str(self.pk)])
 
 
 class Reminder(models.Model):
@@ -29,6 +32,9 @@ class Reminder(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('reminder-detail', args=[str(self.pk)])
+
 
 class IncomeSource(models.Model):
     name = models.CharField(max_length=40)
@@ -38,6 +44,9 @@ class IncomeSource(models.Model):
 
     def __str__(self):
         return self.name + ' - ' + self.type_of_income
+
+    def get_absolute_url(self):
+        return reverse('income-source-detail', args=[str(self.pk)])
 
 
 class Income(models.Model):
@@ -49,6 +58,10 @@ class Income(models.Model):
     def __str__(self):
         return self.source
 
+    
+    def get_absolute_url(self):
+        return reverse('income-detail', args=[str(self.pk)])
+
 
 class Pocket(models.Model):
     name = models.CharField(max_length=40)
@@ -59,6 +72,8 @@ class Pocket(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('pocket-detail', args=[str(self.pk)])
 
 class Place(models.Model):
     name= models.CharField(max_length=40)
@@ -66,6 +81,9 @@ class Place(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('place-detail', args=[str(self.pk)])
 
 
 class Expense(models.Model):
@@ -80,3 +98,6 @@ class Expense(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('expense-detail', args=[str(self.pk)])

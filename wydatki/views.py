@@ -81,7 +81,7 @@ class CategoryListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super(CategoryListView, self).get_context_data(**kwargs)
-        context['amount'] = self.get_queryset().objects.count()
+        context['amount'] = self.get_queryset().count()
         return context
 
 

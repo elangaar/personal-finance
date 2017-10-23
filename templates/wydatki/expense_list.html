@@ -3,9 +3,9 @@
 {% block title %} Lista wydatków {% endblock title %} 
 
 {% block content %}
-	<h1> Lista wydatków </h1>
+	<h1> Lista moich wydatków </h1>
 	{% for e in object_list %}
-		<a href="{% url 'expense-detail' e.pk %}"> {{ e.name }} - {{ e.price }} </a> <br>
+		<a href="{{ e.get_absolute_url }}"> {{ e.name }} - {{ e.price }} </a> <br>
 	{% empty %}
 		<p> Brak wydatków </p>
 	{% endfor %}

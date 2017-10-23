@@ -5,7 +5,7 @@
 {% block content %}
 	<h1> Lista przypomnień </h1>
 	{% for e in object_list %}
-		<p><a href="{% url 'reminder-detail' e.pk %}"> {{ e.name }} </a></p>
+		<p><a href="{{ e.get_absolute_url }}"> {{ e.name }} </a></p>
 	{% empty %}
 		<p> Brak przypomnień </p>
 	{% endfor %}
