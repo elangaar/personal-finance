@@ -28,8 +28,7 @@ class MainView(LoginRequiredMixin, TemplateView):
 
 class ExpenseListView(LoginRequiredMixin, ListView):
     model = Expense
-    template_name='wydatki/my_expense_list.html'
-    paginate_by = 10
+    paginate_by = 5
 
     def get_queryset(self):
         return Expense.objects.filter(owner=self.request.user).order_by('exp_date')
