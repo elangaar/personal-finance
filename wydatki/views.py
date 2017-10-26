@@ -1,24 +1,28 @@
 import logging
 logging.basicConfig(level=logging.DEBUG)
 
+from django.db.models import Sum
+
 from django.urls import reverse, reverse_lazy
 
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.forms import UserCreationForm
 
 from django.views.generic.base import TemplateView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 
-from django.db.models import Sum
 
 from wydatki.models import Expense, Category, Pocket, Place, Reminder, Income, IncomeSource
 
 
 
 
-class MainView(TemplateView):
+class MainView(LoginRequiredMixin, TemplateView):
     template_name = "wydatki/index.html"
     
 
@@ -30,6 +34,7 @@ class ExpenseListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return Expense.objects.filter(owner=self.request.user).order_by('exp_date')
     
+
     def get_context_data(self, **kwargs):
         context = super(ExpenseListView, self).get_context_data(**kwargs)
         sum_value = self.get_queryset().aggregate(Sum('price'))
@@ -39,7 +44,7 @@ class ExpenseListView(LoginRequiredMixin, ListView):
         
 
 
-class ExpenseDetailView(LoginRequiredMixin, DetailView):
+class ExpenseDetailView(DetailView):
     model = Expense
 
 
@@ -48,7 +53,7 @@ class ExpenseCreateView(LoginRequiredMixin, CreateView):
     fields = ['name', 'exp_date', 'category', 'price', 'pocket', 'place'] # 'reminder'
     
     def get_success_url(self):
-        return reverse('my-expense-list')
+        return reverse('expense-list')
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
@@ -346,3 +351,33 @@ class IncomeSourceDeleteView(LoginRequiredMixin, DeleteView):
     model = IncomeSource
     template_name='wydatki/confirm_delete.html'
     success_url = reverse_lazy('income-source-list')
+
+
+class UserCreateView(FormView):
+    template_name='register.html'
+    form_class=UserCreationForm
+    success_url='/expenses/'
+
+    def form_valid(self, form):
+        form.save()
+
+        username = self.request.POST.get('username', None)
+        password = self.request.POST.get('password1', None)
+        user = authenticate(self.request, username=username, password=password)
+        login(self.request, user)
+        return super().form_valid(form)
+
+
+class ProfileUpdateView(UpdateView):
+    model = User
+    fields = ['username']
+    template_name='user_update_form.html'
+
+    def get_success_url(self):
+        return reverse('index')
+
+
+class ProfileDeleteView(DeleteView):
+    model = User
+    template_name = 'wydatki/confirm_delete.html'
+    success_url = reverse_lazy('login')

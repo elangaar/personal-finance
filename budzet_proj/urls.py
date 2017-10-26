@@ -15,9 +15,14 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from wydatki.views import UserCreateView, ProfileUpdateView, ProfileDeleteView
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^register/', UserCreateView.as_view(), name='user-add'),
+    url(r'^update/(?P<pk>[\d]+)/', ProfileUpdateView.as_view(), name='user-update'),
+    url(r'^delete/(?P<pk>[\d]+)/', ProfileDeleteView.as_view(), name='user-delete'),
     url(r'^expenses/', include('wydatki.urls')),
     url(r'^accounts/', include('django.contrib.auth.urls')),
 ]
