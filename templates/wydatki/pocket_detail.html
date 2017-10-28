@@ -7,6 +7,7 @@
 <h2> {{ object.name }} </h2>
 <p> {{ object.limit }} </p>
 <p> {{ object.funds }} </p>
+<p> {{ object.owner}} </p>
 
 <p><a href="{% url 'pocket-update' object.pk %}"> Edytuj </a></p>
 <p><a href="{% url 'pocket-delete' object.pk %}"> Usuń</a></p>

@@ -79,6 +79,7 @@ class ExpenseDeleteView(LoginRequiredMixin, DeleteView):
 
 class CategoryListView(LoginRequiredMixin, ListView):
     model = Category
+    paginate_by = 10
 
     def get_queryset(self):
         return Category.objects.filter(owner=self.request.user).order_by('name')
@@ -126,6 +127,7 @@ class CategoryDeleteView(LoginRequiredMixin, DeleteView):
 
 class PocketListView(LoginRequiredMixin, ListView):
     model = Pocket
+    paginate_by = 10
 
     def get_queryset(self):
         return Pocket.objects.filter(owner=self.request.user).order_by('name')
@@ -171,6 +173,7 @@ class PocketDeleteView(LoginRequiredMixin, DeleteView):
 
 class PlaceListView(LoginRequiredMixin, ListView):
     model = Place
+    paginate_by = 10
 
     def get_queryset(self):
         return Place.objects.filter(owner=self.request.user).order_by('name')
@@ -216,6 +219,7 @@ class PlaceDeleteView(LoginRequiredMixin, DeleteView):
 
 class ReminderListView(LoginRequiredMixin, ListView):
     model = Reminder
+    paginate_by = 10
 
     def get_queryset(self):
         return Reminder.objects.filter(owner=self.request.user).order_by('-remind_date')
@@ -261,6 +265,7 @@ class ReminderDeleteView(LoginRequiredMixin, DeleteView):
 
 class IncomeListView(LoginRequiredMixin, ListView):
     model = Income
+    paginate_by = 10
 
     def get_queryset(self):
         return Income.objects.filter(owner=self.request.user).order_by('source')
@@ -308,6 +313,7 @@ class IncomeDeleteView(LoginRequiredMixin, DeleteView):
 
 class IncomeSourceListView(LoginRequiredMixin, ListView):
     model = IncomeSource
+    paginate_by = 10
 
     def get_queryset(self):
         return IncomeSource.objects.filter(owner=self.request.user).order_by('name')
