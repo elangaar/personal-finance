@@ -28,7 +28,7 @@ class MainView(LoginRequiredMixin, TemplateView):
 
 class ExpenseListView(LoginRequiredMixin, ListView):
     model = Expense
-    paginate_by = 5
+    paginate_by = 10
 
     def get_queryset(self):
         return Expense.objects.filter(owner=self.request.user).order_by('exp_date')
@@ -358,6 +358,10 @@ class IncomeSourceDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('income-source-list')
 
 
+class UserDetailView(LoginRequiredMixin, DetailView):
+    model = User
+
+
 class UserCreateView(FormView):
     template_name='register.html'
     form_class=UserCreationForm
@@ -386,3 +390,5 @@ class ProfileDeleteView(DeleteView):
     model = User
     template_name = 'wydatki/confirm_delete.html'
     success_url = reverse_lazy('login')
+
+

@@ -14,9 +14,30 @@
 
 <div class="container">
 	<div class="row">
-        {% block content %}
+        <div class="col-md-2">
+            Info o użytkowniku (avatar, userneme, ...) </br>
+            Filtrowanie itp.
+            <div>
+                {% if user.is_authenticated %}
+                    
+                <p><b> {{ user.get_username }} </b></p>
+                <a href="{% url 'user-detail' user.pk %}"> Dane konta </a></br>
+                    <a href="{% url 'logout' %}?next={{ request.path }}">Wyloguj </a> </br>
+                {% else %}
+                        <a href="{% url 'login' %}?next={{ request.path }}"> Zaloguj </a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-7">
+            {% block content %}
 
-        {% endblock content %}
+            {% endblock content %}
+
+            <a href="{% url 'index' %}">Powrót do głównej </a> </br>
+            <hr noshade>	
+        </div>
+        <div class="col-md-3">
+        Listy "szybkiego dostępu" (kategorie, portfele, ...)
 	</div>
 </div>
 
