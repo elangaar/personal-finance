@@ -2,20 +2,20 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 
 from django.db.models import Sum
-
-from django.urls import reverse, reverse_lazy
-
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
-
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
+from django.urls import reverse, reverse_lazy
+from django.utils.decorators import method_decorator
 
+from guardian.mixins import PermissionRequiredMixin
+from guardian.shortcuts import assign_perm
 
 from wydatki.models import Expense, Category, Pocket, Place, Reminder, Income, IncomeSource
 
@@ -43,8 +43,10 @@ class ExpenseListView(LoginRequiredMixin, ListView):
         
 
 
-class ExpenseDetailView(DetailView):
+class ExpenseDetailView(PermissionRequiredMixin, DetailView):
     model = Expense
+    permission_required = 'wydatki.view_expense'
+    return_403 = True
 
 
 class ExpenseCreateView(LoginRequiredMixin, CreateView):
@@ -61,20 +63,23 @@ class ExpenseCreateView(LoginRequiredMixin, CreateView):
         return super(ExpenseCreateView, self).form_valid(form)
 
 
-class ExpenseUpdateView(LoginRequiredMixin, UpdateView):
+class ExpenseUpdateView(PermissionRequiredMixin, UpdateView):
     model = Expense
     fields = ['name', 'exp_date', 'category', 'price', 'pocket', 'place'] # 'reminder'
     template_name_suffix='_update_form'
+    permission_required = 'wydatki.change_expense'
+    return_403 = True
     
     def get_success_url(self):              # change to expense-detail
         return reverse('expense-list')
 
 
-class ExpenseDeleteView(LoginRequiredMixin, DeleteView):
+class ExpenseDeleteView(PermissionRequiredMixin, DeleteView):
     model = Expense
     template_name='wydatki/confirm_delete.html'
     success_url = reverse_lazy('expense-list')
-
+    permission_required = 'wydatki.delete_expense'
+    return_403 = True
 
 
 class CategoryListView(LoginRequiredMixin, ListView):
@@ -90,8 +95,11 @@ class CategoryListView(LoginRequiredMixin, ListView):
         return context
 
 
-class CategoryDetailView(LoginRequiredMixin, DetailView):
+
+class CategoryDetailView(PermissionRequiredMixin, DetailView):
     model = Category
+    permission_required = 'wydatki.view_category'
+    return_403 = True
 
 
 class CategoryCreateView(LoginRequiredMixin, CreateView):
@@ -110,19 +118,23 @@ class CategoryCreateView(LoginRequiredMixin, CreateView):
         return super(CategoryCreateView, self).form_valid(form)
 
 
-class CategoryUpdateView(LoginRequiredMixin, UpdateView):
+class CategoryUpdateView(PermissionRequiredMixin, UpdateView):
     model = Category
     fields = ['name']
     template_name_suffix='_update_form'
+    permission_required = 'wydatki.change_category'
+    return_403 = True
 
     def get_success_url(self):
         return reverse('income-source-list')
 
 
-class CategoryDeleteView(LoginRequiredMixin, DeleteView):
+class CategoryDeleteView(PermissionRequiredMixin, DeleteView):
     model = Category
     template_name='wydatki/confirm_delete.html'
     success_url = reverse_lazy('category-list')
+    permission_required = 'wydatki.delete_category'
+    return_403 = True
 
 
 class PocketListView(LoginRequiredMixin, ListView):
@@ -138,8 +150,10 @@ class PocketListView(LoginRequiredMixin, ListView):
         return context
 
 
-class PocketDetailView(LoginRequiredMixin, DetailView):
+class PocketDetailView(PermissionRequiredMixin, DetailView):
     model = Pocket
+    permission_required = 'wydatki.view_pocket'
+    return_403 = True
 
 
 class PocketCreateView(LoginRequiredMixin, CreateView):
@@ -156,19 +170,23 @@ class PocketCreateView(LoginRequiredMixin, CreateView):
         return super(PocketCreateView, self).form_valid(form)
 
 
-class PocketUpdateView(LoginRequiredMixin, UpdateView):
+class PocketUpdateView(PermissionRequiredMixin, UpdateView):
     model = Pocket
     fields = ['name', 'limit', 'funds']
     template_name_suffix='_update_form'
+    permission_required = 'wydatki.change_pocket'
+    return_403 = True
     
     def get_success_url(self):
         return reverse('pocket-list')
 
 
-class PocketDeleteView(LoginRequiredMixin, DeleteView):
+class PocketDeleteView(PermissionRequiredMixin, DeleteView):
     model = Pocket
     template_name='wydatki/confirm_delete.html'
     success_url = reverse_lazy('pocket-list')
+    permission_required = 'wydatki.delete_pocket'
+    return_403 = True
 
 
 class PlaceListView(LoginRequiredMixin, ListView):
@@ -184,8 +202,10 @@ class PlaceListView(LoginRequiredMixin, ListView):
         return context
 
 
-class PlaceDetailView(LoginRequiredMixin, DetailView):
+class PlaceDetailView(PermissionRequiredMixin, DetailView):
     model = Place
+    permission_required = 'wydatki.view_place'
+    return_403 = True
 
 
 class PlaceCreateView(LoginRequiredMixin, CreateView):
@@ -202,19 +222,23 @@ class PlaceCreateView(LoginRequiredMixin, CreateView):
         return super(PlaceCreateView, self).form_valid(form)
 
 
-class PlaceUpdateView(LoginRequiredMixin, UpdateView):
+class PlaceUpdateView(PermissionRequiredMixin, UpdateView):
     model = Place
     fields = ['name']
     template_name_suffix='_update_form'
+    permission_required = 'wydatki.change_place'
+    return_403 = True
 
     def get_success_url(self):
         return reverse('place-list')
 
 
-class PlaceDeleteView(LoginRequiredMixin, DeleteView):
+class PlaceDeleteView(PermissionRequiredMixin, DeleteView):
     model = Place
     template_name='wydatki/confirm_delete.html'
     success_url = reverse_lazy('place-list')
+    permission_required = 'wydatki.delete_place'
+    return_403 = True
 
 
 class ReminderListView(LoginRequiredMixin, ListView):
@@ -230,8 +254,10 @@ class ReminderListView(LoginRequiredMixin, ListView):
         return context
 
 
-class ReminderDetailView(LoginRequiredMixin, DetailView):
+class ReminderDetailView(PermissionRequiredMixin, DetailView):
     model = Reminder
+    permission_required = 'wydatki.view_reminder'
+    return_403 = True
 
 
 class ReminderCreateView(LoginRequiredMixin, CreateView):
@@ -248,19 +274,23 @@ class ReminderCreateView(LoginRequiredMixin, CreateView):
         return super(ReminderCreateView, self).form_valid(form)
 
 
-class ReminderUpdateView(LoginRequiredMixin, UpdateView):
+class ReminderUpdateView(PermissionRequiredMixin, UpdateView):
     model = Reminder
     fields = ['name', 'remind_date', 'as_before', 'message', 'importance']
     template_name_suffix='_update_form'
+    permission_required = 'wydatki.change_reminder'
+    return_403 = True
 
     def get_success_url(self):
         return reverse('reminder-list')
 
 
-class ReminderDeleteView(LoginRequiredMixin, DeleteView):
+class ReminderDeleteView(PermissionRequiredMixin, DeleteView):
     model = Reminder
     template_name='wydatki/confirm_delete.html'
     success_url = reverse_lazy('reminder-list')
+    permission_required = 'wydatki.delete_reminder'
+    return_403 = True
 
 
 class IncomeListView(LoginRequiredMixin, ListView):
@@ -278,13 +308,15 @@ class IncomeListView(LoginRequiredMixin, ListView):
         return context
 
 
-class IncomeDetailView(LoginRequiredMixin, DetailView):
+class IncomeDetailView(PermissionRequiredMixin, DetailView):
     model = Income
+    permission_required = 'wydatki.view_income'
+    return_403 = True
 
 
 class IncomeCreateView(LoginRequiredMixin, CreateView):
     model = Income
-    fields = ['source', 'amount', 'income_date']
+    fields = ['name', 'source', 'amount', 'income_date']
 
     def get_success_url(self):
         return reverse('income-list')
@@ -296,19 +328,24 @@ class IncomeCreateView(LoginRequiredMixin, CreateView):
         return super(IncomeCreateView, self).form_valid(form)
 
 
-class IncomeUpdateView(LoginRequiredMixin, UpdateView):
+class IncomeUpdateView(PermissionRequiredMixin, UpdateView):
     model = Income
-    fields = ['source', 'amount']
+    fields = ['name', 'source', 'amount', 'income_date']
     template_name_suffix='_update_form'
+    permission_required = 'wydatki.change_income'
+    return_403 = True
 
     def get_success_url(self):
         return reverse('income-list')
 
 
-class IncomeDeleteView(LoginRequiredMixin, DeleteView):
+class IncomeDeleteView(PermissionRequiredMixin, DeleteView):
     model = Income
     template_name='wydatki/confirm_delete.html'
     success_url = reverse_lazy('income-list')
+    permission_required = 'wydatki.delete_income'
+    return_403 = True
+
 
 
 class IncomeSourceListView(LoginRequiredMixin, ListView):
@@ -324,8 +361,10 @@ class IncomeSourceListView(LoginRequiredMixin, ListView):
         return context
 
 
-class IncomeSourceDetailView(LoginRequiredMixin, DetailView):
+class IncomeSourceDetailView(PermissionRequiredMixin, DetailView):
     model = IncomeSource
+    permission_required = 'wydatki.view_incomesource'
+    return_403 = True
 
 
 class IncomeSourceCreateView(LoginRequiredMixin, CreateView):
@@ -335,7 +374,6 @@ class IncomeSourceCreateView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse('income-source-list')
 
-
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.owner = self.request.user
@@ -343,22 +381,26 @@ class IncomeSourceCreateView(LoginRequiredMixin, CreateView):
         return super(IncomeSourceCreateView, self).form_valid(form)
 
 
-class IncomeSourceUpdateView(LoginRequiredMixin, UpdateView):
+class IncomeSourceUpdateView(PermissionRequiredMixin, UpdateView):
     model = IncomeSource
     fields = ['name', 'type_of_income', 'permanent']
     template_name_suffix='_update_form'
+    permission_required = 'wydatki.change_incomesource'
+    return_403 = True
 
     def get_success_url(self):
         return reverse('income-source-list')
 
 
-class IncomeSourceDeleteView(LoginRequiredMixin, DeleteView):
+class IncomeSourceDeleteView(PermissionRequiredMixin, DeleteView):
     model = IncomeSource
     template_name='wydatki/confirm_delete.html'
     success_url = reverse_lazy('income-source-list')
+    permission_required = 'wydatki.delete_incomesource'
+    return_403 = True
 
 
-class UserDetailView(LoginRequiredMixin, DetailView):
+class UserDetailView(DetailView):
     model = User
 
 
