@@ -13,6 +13,10 @@ from guardian.shortcuts import assign_perm
 # logging.basicConfig(level=logging.DEBUG)
 
 
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_profile')
+    picture = models.ImageField(upload_to='profile_pictures', default='wydatki/default.jpg')
+
 
 class Category(models.Model):
     name = models.CharField(max_length=40)
@@ -22,6 +26,7 @@ class Category(models.Model):
         permissions = (
             ('view_category', 'View category'),
         )
+
 
 
     def __str__ (self):
@@ -200,3 +205,11 @@ def place_post_save(sender, **kwargs):
     assign_perm('change_place', user, place)
     assign_perm('delete_place', user, place)
 
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.user_profile.save()

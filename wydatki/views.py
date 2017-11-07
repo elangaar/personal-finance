@@ -7,6 +7,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
+from django.core.exceptions import PermissionDenied
+from django.forms.models import inlineformset_factory
+from django.shortcuts import render, HttpResponseRedirect
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.views.generic.list import ListView
@@ -17,9 +20,8 @@ from django.utils.decorators import method_decorator
 from guardian.mixins import PermissionRequiredMixin
 from guardian.shortcuts import assign_perm
 
-from wydatki.models import Expense, Category, Pocket, Place, Reminder, Income, IncomeSource
-
-
+from wydatki.models import Expense, Category, Pocket, Place, Reminder, Income, IncomeSource, Profile
+from .forms import UserForm
 
 
 class MainView(LoginRequiredMixin, TemplateView):
@@ -419,18 +421,35 @@ class UserCreateView(FormView):
         return super().form_valid(form)
 
 
-class ProfileUpdateView(UpdateView):
-    model = User
-    fields = ['username']
-    template_name='user_update_form.html'
-
-    def get_success_url(self):
-        return reverse('index')
-
-
 class ProfileDeleteView(DeleteView):
     model = User
     template_name = 'wydatki/confirm_delete.html'
     success_url = reverse_lazy('login')
 
+
+@login_required()
+def edit_user(request, pk):
+    user = User.objects.get(pk=pk)
+    user_form = UserForm(instance=user)
+    ProfileInlineFormset = inlineformset_factory(User, Profile, fields=('picture',))
+    formset = ProfileInlineFormset(instance=user)
+
+    if request.user.is_authenticated() and request.user.id == user.id:
+        if request.method == 'POST':
+            user_form = UserForm(request.POST, request.FILES, instance=user)
+            formset = ProfileInlineFormset(request.POST, request.FILES, instance=user)
+            if user_form.is_valid():
+                created_user = user_form.save(commit=False)
+                formset = ProfileInlineFormset(request.POST, request.FILES, instance=created_user)
+                if formset.is_valid():
+                    created_user.save()
+                    formset.save()
+                    return HttpResponseRedirect(reverse('index'))
+        return render(request, 'user_update_form.html', {
+            'noodle': pk,
+            'noodle_form': user_form,
+            'formset': formset
+        })
+    else:
+        raise PermissionDenied
 

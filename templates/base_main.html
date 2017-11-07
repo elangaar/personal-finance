@@ -2,12 +2,17 @@
 
 <html lang="pl">
 <head>
+    {% load static %}
     <meta charset="utf-8">
     <title>{% block title %} {% endblock title %}</title>
     {% block head %} {% endblock head %}
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-
+    <style>
+    img {
+        max-width: 90%;
+    }
+    </style>
 </head>
 
 <body>
@@ -15,12 +20,17 @@
 <div class="container">
 	<div class="row">
         <div class="col-md-2">
+            <img src="{{ user.user_profile.picture.url }}" alt="avatar" />
+            <p> {{ user.user_profile.age }} </p>
             Info o użytkowniku (avatar, userneme, ...) </br>
             Filtrowanie itp.
             <div>
                 {% if user.is_authenticated %}
                     
                 <p><b> {{ user.get_username }} </b></p>
+                {% if user.first_name %}
+                    <p><b> {{ user.first_name }} </b></p>
+                {% endif %}
                 <a href="{% url 'user-detail' user.pk %}"> Dane konta </a></br>
                     <a href="{% url 'logout' %}?next={{ request.path }}">Wyloguj </a> </br>
                 {% else %}

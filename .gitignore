@@ -4,3 +4,4 @@
 *.swo
 db.sqlite3
 wydatki/migrations/*
+

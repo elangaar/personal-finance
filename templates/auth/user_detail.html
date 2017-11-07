@@ -3,4 +3,5 @@
 {% block title %} Dane konta {% endblock title %} 
 {% block content %}
     <h2>{{ object.username }} </h2>
+    <a href="{% url 'profile-update' object.pk %}"> Edytuj profil </a>
 {% endblock content %}
