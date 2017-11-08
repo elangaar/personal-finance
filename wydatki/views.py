@@ -21,7 +21,7 @@ from guardian.mixins import PermissionRequiredMixin
 from guardian.shortcuts import assign_perm
 
 from wydatki.models import Expense, Category, Pocket, Place, Reminder, Income, IncomeSource, Profile
-from .forms import UserForm
+from .forms import UserForm, ExpenseForm, IncomeForm
 
 
 class MainView(LoginRequiredMixin, TemplateView):
@@ -52,9 +52,14 @@ class ExpenseDetailView(PermissionRequiredMixin, DetailView):
 
 
 class ExpenseCreateView(LoginRequiredMixin, CreateView):
-    model = Expense
-    fields = ['name', 'exp_date', 'category', 'price', 'pocket', 'place'] # 'reminder'
-    
+    form_class = ExpenseForm
+    template_name = 'wydatki/expense_form.html'
+
+    def get_form_kwargs(self):
+        kwargs = super(ExpenseCreateView, self).get_form_kwargs()
+        kwargs['user_id'] = self.request.user.pk
+        return kwargs
+
     def get_success_url(self):
         return reverse('expense-list')
 
@@ -317,11 +322,17 @@ class IncomeDetailView(PermissionRequiredMixin, DetailView):
 
 
 class IncomeCreateView(LoginRequiredMixin, CreateView):
-    model = Income
-    fields = ['name', 'source', 'amount', 'income_date']
+    form_class = IncomeForm
+    template_name = 'wydatki/income_form.html'
 
     def get_success_url(self):
         return reverse('income-list')
+
+    def get_form_kwargs(self):
+        kwargs = super(IncomeCreateView, self).get_form_kwargs()
+        kwargs['user_id'] = self.request.user.pk
+        logging.debug(kwargs)
+        return kwargs
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
