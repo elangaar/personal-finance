@@ -2,6 +2,7 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 
 from django.db.models import Sum
+from django.db import IntegrityError
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -9,7 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import PermissionDenied
 from django.forms.models import inlineformset_factory
-from django.shortcuts import render, HttpResponseRedirect
+from django.shortcuts import render, HttpResponse, HttpResponseRedirect
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.views.generic.list import ListView
@@ -171,11 +172,13 @@ class PocketCreateView(LoginRequiredMixin, CreateView):
         return reverse('pocket-list')
     
     def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.owner = self.request.user
-        self.object.save()
-        return super(PocketCreateView, self).form_valid(form)
-
+        try:
+            self.object = form.save(commit=False)
+            self.object.owner = self.request.user
+            self.object.save()
+            return super(PocketCreateView, self).form_valid(form)
+        except IntegrityError as e:
+            return HttpResponse('<h1>' + str(e.__cause__) +  '</h1>')
 
 class PocketUpdateView(PermissionRequiredMixin, UpdateView):
     model = Pocket
