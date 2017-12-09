@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'wydatki',
     'guardian',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -86,7 +87,7 @@ DATABASES = {
 ## DATABASES = {
 ##     'default': {
 ##         'ENGINE': 'django.db.backends.oracle',
-##         'NAME': '192.168.1.2:1521/orclpdb.localdomain',
+##         'NAME': 'orcl1',
 ##         'USER': 'budzet',
 ##         'PASSWORD': 'passwd',
 ##     }

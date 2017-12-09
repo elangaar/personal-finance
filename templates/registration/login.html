@@ -1,35 +1,55 @@
 {% extends "base.html" %}
+{% load widget_tweaks %} 
+
+{% block head %} 
+<style>
+p {
+    font-size: 70%;
+}
+</style>
+{% endblock head %}
 
 {% block content %}
+<div class="row align-items-center justify-content-center">
+    <div class="auto-size">
+        <h3> Logowanie do MojeFinanse </h3>
+        <br />
+        <div>
+            {% if form.errors %}
+                <p> Twoja nazwa użytkownika i hasło nie pasują do siebie. Spróbuj jeszcze raz. </p>
+            {% endif %}
 
-{% if form.errors %}
-<p> Twoja nazwa użytkownika i hasło nie pasują do siebie. Spróbuj jeszcze raz. </p>
-{% endif %}
+            {% if next %}
+                {% if user.is_authenticated %}
+                <p> Twoje konto nie ma dostępu do tej strony. Aby kontynuować,
+                zaloguj się na konto, które ma te uprawnienia. </p>
+                {% endif %}
+            {% endif %}
 
-{% if next %}
-    {% if user.is_authenticated %}
-    <p> Twoje konto nie ma dostępu do tej strony. Aby kontynuować,
-    zaloguj się na konto, które ma te uprawnienia. </p>
-    {% endif %}
-{% endif %}
+            <form method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+                {% for hidden in form.hidden_fields %}
+                  {{ hidden }}
+                {% endfor %}
+                
+                <div class="form-group">
+                    {% render_field form.username class="form-control" placeholder="nazwa użytkownika" %} 
+                </div>
+                <div class="form-group">
+                    {% render_field form.password class="form-control" placeholder="hasło" %} 
+                </div>
 
-<form method="post" action="{% url 'login' %}">
-    {% csrf_token %}
-    <div>
-    <td> {{ form.username.label_tag }} </td>
-    <td> {{ form.username }} </td>
+                    <input type='submit' value='Zaloguj' />
+                    <input type='hidden' name='next' value="{{ next }}" />
+                    <br />
+                    <br />
+                    <p> <a href="{% url 'password_reset' %}"> Zapomniałeś hasła? </a>
+                    <a href="{% url 'user-add' %}"> Utwórz nowe konto </a></p>
+                </div>
+            </form>
+            
+        </div>
     </div>
-    <div>
-    <td> {{ form.password.label_tag }} </td>
-    <td> {{ form.password }} </td>
-    </div>
-    <div>
-    <input type='submit' value='Zaloguj' />
-    <input type='hidden' name='next' value="{{ next }}" />
-    </div>
-</form>
-<p> <a href="{% url 'password_reset' %}"> Zapomniałeś hasła? </a></p>
-<p> <a href="{% url 'user-add' %}"> Utwórz nowe konto </a></p>
-
+</div>
 
 {% endblock content %}
