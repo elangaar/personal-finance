@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pl">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{% block title %} {% endblock title %}</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+
+    <style>
+    html, body {
+        height: 100vh;
+        margin: 0px;
+        padding: 0px;
+    }
+    </style>
+    {% load widget_tweaks %}
+
+    {% block head %} {% endblock head %}
+</head>
+
+<body>
+
+<div class="container h-100">
+
+<div class="row h-100 align-items-center justify-content-center">
+    <div class="auto-size">
+        <h4> {% block header %} {% endblock header %}</h4>
+        <br />
+        <div>
+            <form method="post" action="{% block url %} {% endblock url %}">
+                {% csrf_token %}
+                {% for hidden in form.hidden_fields %}
+                  {{ hidden }}
+                {% endfor %}
+                {% for field in form %}
+                    <div>
+                    <label class="mb-0" for="{{ field.id_for_label }}">{{ field.label }}</label> <br />
+                    {% render_field field class="form-control form-control-sm mb-3 mt-0 pd-0" %}
+                    {% for error in field.errors %}
+                      <p class="help-block">{{ error }}</p>
+                    {% endfor %}
+                  </div>
+                {% endfor %}
+                    <br />
+                    <button class="btn btn-outline-primary btn-sm" type='submit'> Dodaj </button>
+                    <button onclick="window.history.back();" class="btn btn-outline-secondary btn-sm" type="button">Anuluj</button>
+                    <br />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+	<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+</body>
+</html>

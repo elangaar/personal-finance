@@ -129,20 +129,21 @@ class CategoryCreateView(LoginRequiredMixin, CreateView):
 class CategoryUpdateView(PermissionRequiredMixin, UpdateView):
     model = Category
     fields = ['name']
+    success_url = reverse_lazy('category-list')
     template_name_suffix='_update_form'
     permission_required = 'wydatki.change_category'
     return_403 = True
 
-    def get_success_url(self):
-        return reverse('income-source-list')
 
 
 class CategoryDeleteView(PermissionRequiredMixin, DeleteView):
     model = Category
-    template_name='wydatki/confirm_delete.html'
-    success_url = reverse_lazy('category-list')
+    template_name='wydatki/category_delete.html'
     permission_required = 'wydatki.delete_category'
     return_403 = True
+
+    def get_success_url(self):
+        return reverse('category-list')
 
 
 class PocketListView(LoginRequiredMixin, ListView):
@@ -466,4 +467,3 @@ def edit_user(request, pk):
         })
     else:
         raise PermissionDenied
-
