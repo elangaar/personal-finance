@@ -26,7 +26,7 @@ from .forms import UserForm, ExpenseForm, IncomeForm
 
 
 class MainView(LoginRequiredMixin, TemplateView):
-    template_name = "wydatki/index.html"
+    template_name = "base_main.html"
     
 
 class ExpenseListView(LoginRequiredMixin, ListView):
@@ -100,8 +100,13 @@ class CategoryListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super(CategoryListView, self).get_context_data(**kwargs)
         context['amount'] = self.get_queryset().count()
+        category_expenses = {}
+        for cat in self.get_queryset():
+            cat_exp_sum = Expense.objects.filter(category=cat).aggregate(Sum('price'))
+            if cat_exp_sum['price__sum'] != None:
+                category_expenses[str(cat)] = cat_exp_sum['price__sum']
+        context['category_expenses'] = category_expenses
         return context
-
 
 
 class CategoryDetailView(PermissionRequiredMixin, DetailView):
@@ -138,7 +143,7 @@ class CategoryUpdateView(PermissionRequiredMixin, UpdateView):
 
 class CategoryDeleteView(PermissionRequiredMixin, DeleteView):
     model = Category
-    template_name='wydatki/category_delete.html'
+    template_name='wydatki/confirm_delete.html'
     permission_required = 'wydatki.delete_category'
     return_403 = True
 
