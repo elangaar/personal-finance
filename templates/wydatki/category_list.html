@@ -1,15 +1,37 @@
 {% extends "base_main.html" %}
 
-{% block title %} Lista kategorii{% endblock title %} 
+{% block title %} Kategorie wydatków {% endblock title %} 
 
-{% block content %}
-	<h1> Lista kategorii </h1>
-	{% for e in object_list %}
-		<p><a href="{{ e.get_absolute_url }}"> {{ e.name }}</a></p>
-	{% empty %}
-		<p> Brak kategorii </p>
-	{% endfor %}
-
+{% block main_block %}
+	<h4> Kategorie wydatków </h4>
+    <table class="table table-sm">
+        <thead
+            <tr>
+                <th> Nazwa </th>
+                <th> Suma wydatków</th>
+                <th> </th>
+                <th> </th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for e in object_list %}
+            <tr>
+                <td> <a href="{{ e.get_absolute_url }}"> {{ e.name }}</a></td>
+                <td>  
+                    {% for cat, exp in category_expenses.items %}
+                        {% if cat == e.name %}
+                            {{ exp }}
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td> <a class="btn btn-outline-warning btn-sm" href="{% url 'category-update' e.pk %}"> Edytuj </a> </td>
+                <td> <a class="btn btn-outline-danger btn-sm" href="{% url 'category-delete' e.pk %}"> Usuń </a> </td>
+            </tr>
+            {% empty %}
+                <p> Brak kategorii </p>
+        {% endfor %}
+        </tbody>
+    </table>
     {% if is_paginated %}
         <ul class="pagination">
             {% if page_obj.has_previous %}
@@ -34,5 +56,7 @@
     {% endif %}
 	<hr noshade>
 	<p> Ilość kategorii: {{ amount }} </p>
-	<a href="{% url 'category-add' %}"> Dodaj kategorię </a> </br>
-{% endblock content %}
+
+    <p><a class="btn btn-outline-primary btn-sm" href="{% url 'category-add' %}"> Dodaj kategorię</a></p>
+
+{% endblock main_block %}
