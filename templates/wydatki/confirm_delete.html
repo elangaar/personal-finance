@@ -1,11 +1,10 @@
-{% extends "base.html" %}
+{% extends "wydatki/base_delete.html" %}
 
-{% block title %} {% endblock title %}
-
-{% block content %}
-	<form action="" method="post"> {% csrf_token %}
-		<p> Czy chcesz usunąć {{ object }} </p>
-		<input type="submit" name="Usuń" />
-
-	</form>
-{% endblock content %}
+{% block delete_form %}
+    <form action="" method="post"> {% csrf_token %}   
+        <h5 class="mb-4">Usuwanie</h5>
+        <p class="mb-4"> Czy chcesz usunąć <b>{{ object }}</b> ? </p>
+        <button class="btn btn-outline-primary btn-sm" type='submit'> Usuń </button>
+        <button onclick="window.history.back();" class="btn btn-outline-secondary btn-sm" type="button">Anuluj</button>
+    </form>
+{% endblock delete_form %}

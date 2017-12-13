@@ -1,39 +1,53 @@
 {% extends "base_main.html" %}
 
-{% block title %} Lista wydatków {% endblock title %} 
+{% block title %} Wydatki {% endblock title %}
 
-{% block content %}
-	<h1> Lista moich wydatków </h1>
-	{% for e in object_list %}
-		<a href="{% url 'expense-detail' e.pk %}"> {{ e.name }} - {{ e.price }} </a> <br>
-	{% empty %}
-		<p> Brak wydatków </p>
-	{% endfor %}
+{% block head_extra %}
+<style>
+p, th, td {
+    font-size: 90%;
+}
+</style>
+{% endblock head_extra %}
 
-    {% if is_paginated %}
-        <ul class="pagination">
-            {% if page_obj.has_previous %}
-                <li><a href="?page={{ page_obj.previous_page_number }}"> &laquo; </a></li>
-            {% else %}
-                <li class="disabled"><span>&laquo;</span></li>
-            {% endif %}
-            {% for i in paginator.page_range %}
-                {% if page_obj.number == i %}
-                    <li class="active"><span> {{ i }} <span class="sr-only">(current)</span></span></li>
-                {% else %}
-                    <li><a href="?page={{ i }}">{{ i }}</a></li>
-                {% endif %}
-            {% endfor %}
-            {% if page_obj.has_next %}
-                <li><a href="?page={{ page_obj.next_page_number }}"> &raquo; </a></li>
-            {% else %}
-                <li class="disabled"><span>&raquo;</span></li>
-            {% endif %}
-        </ul>
 
-    {% endif %}
+{% block main_block %}
+<h4> Wydatki </h4>
+<table class="table table-sm">
+  <thead>
+    <tr>
+      <th>Nazwa</th>
+      <th>Kategoria</th>
+      <th>Miejsce</th>
+      <th>Portfel</th>
+      <th>Data</th>
+      <th>Cena</th>
+    </tr>
+  </thead>
+  <tbody>
 
+    {% for e in expense_list %}
+    <tr>
+      <td><b>{{ e.name }}</b></td>
+      <td>{{ e.category }}</td>
+      <td>{{ e.place }}</td>
+      <td>{{ e.pocket }}</td>
+      <td>{{ e.exp_date }}</td>
+      <td>{{ e.price }}</td>
+      <td><a class="btn btn-outline-warning btn-sm" href="{% url 'expense-update' e.pk %}"> Edytuj </a></td>
+      <td><a class="btn btn-outline-danger btn-sm" href="{% url 'expense-delete' e.pk %}"> Usuń </a></td>
+
+    </tr>
+    {% empty %}
+        <p><b> Brak wydatków </b></p>
+
+{% endfor %}
+  </tbody>
+</table>
 	<hr noshade>
-	<p> Suma wydatków: {{ sum }} </p>
-	<a href="{% url 'expense-add' %}"> Dodaj wydatek </a></br>
-{% endblock content %}
+	<p> Suma wydatków: {{ sum|floatformat:2 }} </p>
+
+<p><a class="btn btn-outline-primary btn-sm" href="{% url 'expense-add' %}"> Dodaj wydatek </a></p>
+
+{% endblock main_block %}
+

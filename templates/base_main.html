@@ -1,61 +1,67 @@
-<!doctype html>
+{% extends "base.html" %}
 
-<html lang="pl">
-<head>
-    {% load static %}
-    <meta charset="utf-8">
-    <title>{% block title %} {% endblock title %}</title>
-    {% block head %} {% endblock head %}
+{% block head %}
+<title> {% block title %} {% endblock title %} </title> 
+<style>
+html, body {
+    height: 100vh;
+}
+.test-size {
+    border-style: solid;
+    border-color: red;
+    height: 90%;
+}
+</style>
+{% endblock head %}
 
-    <style>
-    img {
-        max-width: 90%;
-    }
-    </style>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-<script
-  src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-  crossorigin="anonymous"></script> 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js"></script>
-</head>
 
-<body>
+{% block content %}
+<nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+    <a class="navbar-brand mr-auto" href="{% url 'index' %}">MojeFinanse</a>
+    <ul class="navbar-nav">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 
-<div class="container">
-	<div class="row">
-        <div class="col-md-2">
-            <img src="{{ user.user_profile.picture.url }}" alt="avatar" />
-            <p> {{ user.user_profile.age }} </p>
-            Info o użytkowniku (avatar, userneme, ...) </br>
-            Filtrowanie itp.
-            <div>
                 {% if user.is_authenticated %}
                     
-                <p><b> {{ user.get_username }} </b></p>
-                {% if user.first_name %}
-                    <p><b> {{ user.first_name }} </b></p>
-                {% endif %}
-                <a href="{% url 'user-detail' user.pk %}"> Dane konta </a></br>
-                    <a href="{% url 'logout' %}?next={{ request.path }}">Wyloguj </a> </br>
-                {% else %}
-                        <a href="{% url 'login' %}?next={{ request.path }}"> Zaloguj </a>
-                {% endif %}
+                    {{ user.get_username }}
+        </a>
+                    <div class="dropdown-menu dropdown-menu-right"  aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="{% url 'user-detail' user.pk %}">Dane konta</a>
+                        <a class="dropdown-item" href="{% url 'logout' %}?next={{ request.path }}">Wyloguj</a>
+                    </div>
+              {% endif %}
+      </li>
+    </ul>
+</nav>
+
+<div class="row" style="height: 90%;">
+    <div class="col-md-2 mt-3">
+        <div class="card h-100">
+            <div class="card-block">
+                <a class="text-muted" href="{% url 'expense-list' %}">Wydatki </a></br>
+                <a class="text-muted" href="{% url 'category-list' %}">Kategorie</a></br>
+                <a class="text-muted" href="{% url 'pocket-list' %}">Portfele</a></br>
+                <a class="text-muted" href="{% url 'place-list' %}">Miejsca</a></br>
+                <a class="text-muted" href="{% url 'reminder-list' %}">Przypomnienia</a></br>
+                <a class="text-muted" href="{% url 'income-list' %}">Dochody</a></br>
+                <a class="text-muted" href="{% url 'income-source-list' %}">Żródła dochodów</a></br>
             </div>
         </div>
-        <div class="col-md-7">
-            {% block content %}
+    </div>
+    <div class="col-md-10 mt-3">
+        <div class="card h-100">
+            <div class="card-block">
+        
+                {% block main_block %}
 
-            {% endblock content %}
+                {%  endblock main_block %}
 
-            <a href="{% url 'index' %}">Powrót do głównej </a> </br>
-            <hr noshade>	
+            </div>
         </div>
-        <div class="col-md-3">
-        Listy "szybkiego dostępu" (kategorie, portfele, ...)
-	</div>
+    </div>
 </div>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 
-</body>
-</html>
+
+
+ {% endblock content %}
