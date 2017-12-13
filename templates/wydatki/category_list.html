@@ -2,6 +2,14 @@
 
 {% block title %} Kategorie wydatków {% endblock title %} 
 
+{% block head_extra %}
+<style>
+th, td {
+    font-size: 90%;
+}
+</style>
+{% endblock head_extra %}
+
 {% block main_block %}
 	<h4> Kategorie wydatków </h4>
     <table class="table table-sm">
@@ -16,7 +24,7 @@
         <tbody>
         {% for e in object_list %}
             <tr>
-                <td> <a href="{{ e.get_absolute_url }}"> {{ e.name }}</a></td>
+                <td><b> {{ e.name }} </b></td>
                 <td>  
                     {% for cat, exp in category_expenses.items %}
                         {% if cat == e.name %}
