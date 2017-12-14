@@ -1,14 +1,37 @@
 {% extends "base_main.html" %}
 
-{% block title %} Lista miejsc {% endblock title %} 
+{% block title %} Miejsca {% endblock title %} 
 
-{% block content %}
-	<h1> Lista miejsc </h1>
-	{% for e in object_list %}
-	<p><a href="{{ e.get_absolute_url }}"> {{ e.name }} </a></p>
-	{% empty %}
-		<p> Brak miejsc </p>
-	{% endfor %}
+{% block head_extra %}
+<style>
+th, td {
+    font-size: 90%;
+}
+</style>
+{% endblock head_extra %}
+
+{% block main_block %}
+	<h4> Miejsca </h4>
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th>Nazwa</th>
+                <th></th>
+                <th></th>
+            </td>
+        </thead>
+        <tbody>
+            {% for e in object_list %}
+                <tr>
+                    <td>{{ e.name }}</td> 
+                    <td><a class="btn btn-outline-warning btn-sm" href="{% url 'place-update' e.pk %}"> Edytuj </td>
+                    <td><a class="btn btn-outline-danger btn-sm" href="{% url 'place-delete' e.pk %}"> Usuń </td>
+                </tr>
+                {% empty %}
+                    <p> Brak miejsc </p>
+            {% endfor %}
+        </tbody>
+    </table>
 
     {% if is_paginated %}
         <ul class="pagination">
@@ -26,13 +49,14 @@
             {% endfor %}
             {% if page_obj.has_next %}
                 <li><a href="?page={{ page_obj.next_page_number }}"> &raquo; </a></li>
-            {% else %}
-                <li class="disabled"><span>&raquo;</span></li>
+            {% else %} <li class="disabled"><span>&raquo;</span></li>
             {% endif %}
         </ul>
-
     {% endif %}
 	<hr noshade>
 	<p> Ilość miejsc: {{ amount }} </p>
-	<a href="{% url 'place-add' %}"> Dodaj miejsce</a></br>
-{% endblock content %}
+
+    <a class="btn btn-outline-primary btn-sm" href="{% url 'place-add' %}"> Dodaj miejsce </a>
+
+
+{% endblock main_block %}

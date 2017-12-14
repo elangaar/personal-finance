@@ -1,14 +1,44 @@
 {% extends "base_main.html" %}
 
-{% block title %} Lista dochodów {% endblock title %} 
+{% block title %} Dochody {% endblock title %} 
 
-{% block content %}
-	<h1> Lista dochodów </h1>
-	{% for e in object_list %}
-	<p> <a href="{{ e.get_absolute_url }}"> {{ e.source }} - {{ e.amount }} </a></p>
-	{% empty %}
-		<p> Brak dochodów </p>
-	{% endfor %}
+{% block head_extra %}
+<style>
+th, td {
+    font-size: 90%;
+}
+</style>
+{% endblock head_extra %}
+
+{% block main_block %}
+	<h4> Dochody </h4>
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th> Nazwa </th>
+                <th> Źródło</th>
+                <th> Kwota</th>
+                <th> Data</th>
+                <th> </th>
+                <th> </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for e in object_list %}
+            <tr>
+                <td><b>{{ e.name }} </b></td>
+                <td> {{ e.source }} </td>
+                <td> {{ e.amount }} </td>
+                <td> {{ e.income_date }} </td>
+                <td> <a class="btn btn-outline-warning btn-sm" href="{% url 'income-update' e.pk %}"> Edytuj </a> </td>
+                <td> <a class="btn btn-outline-danger btn-sm" href="{% url 'income-delete' e.pk %}"> Usuń </a> </td>
+            {% empty %}
+                <p> Brak dochodów </p>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
     {% if is_paginated %}
         <ul class="pagination">
             {% if page_obj.has_previous %}
@@ -29,9 +59,10 @@
                 <li class="disabled"><span>&raquo;</span></li>
             {% endif %}
         </ul>
-
     {% endif %}
 	<hr noshade>
 	<p> Suma dochodów: {{ sum }} </p>
-	<a href="{% url 'income-add' %}"> Dodaj dochód</a></br>
-{% endblock content %}
+
+    <a class="btn btn-outline-primary btn-sm" href="{% url 'income-add' %}"> Dodaj dochód </a>
+
+{% endblock main_block %}

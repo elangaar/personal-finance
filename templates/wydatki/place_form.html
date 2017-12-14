@@ -1,9 +1,7 @@
-{% extends "base.html" %}
+{% extends "wydatki/base_form.html" %} 
 
-{% block content %}
-<form action="" method="post">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Submit" />
-</form>
-{% endblock content %}
+{% block title %} Dodaj miejsce {% endblock title %}
+
+{% block header %} Dodaj miejsce {% endblock header %}
+
+{% block url %} {% url 'place-add' %} {% endblock url %}

@@ -1,14 +1,38 @@
 {% extends "base_main.html" %}
 
-{% block title %} Lista źródeł dochodu {% endblock title %} 
+{% block title %} Źródła dochodu {% endblock title %} 
 
-{% block content %}
-	<h1> Lista źródeł dochodu </h1>
-	{% for e in object_list %}
-	<p><a href="{{ e.get_absolute_url }}">  {{ e.name }}  -  {{ e.type_of_income }} </a> </p>
-	{% empty %}
-		<p> Brak źródeł dochodu </p>
-	{% endfor %}
+{% block head_extra %}
+<style>
+th, td {
+    font-size: 90%;
+}
+</style>
+{% endblock head_extra %}
+
+{% block main_block %}
+	<h4>Źródła dochodu </h4>
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th> Nazwa </th>
+                <th> </th>
+                <th> </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for e in object_list %}
+                <tr> 
+                    <td><b>{{ e.name }}</b></td>
+                    <td> <a class="btn btn-outline-warning btn-sm" href="{% url 'income-update' e.pk %}"> Edytuj </a> </td>
+                    <td> <a class="btn btn-outline-danger btn-sm" href="{% url 'income-delete' e.pk %}"> Usuń </a> </td>
+                {% empty %}
+                    <p> Brak źródeł dochodu </p>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
     {% if is_paginated %}
         <ul class="pagination">
             {% if page_obj.has_previous %}
@@ -32,6 +56,8 @@
 
     {% endif %}
 	<hr noshade>
-	<p> Suma źródeł dochodu: {{ amount }} </p>
-	<a href="{% url 'income-source-add' %}"> Dodaj źródło dochodu </a></br>
-{% endblock content %}
+	<p> Liczba źródeł dochodu: {{ amount }} </p>
+
+    <p><a href="{% url 'income-source-add' %}"> Dodaj źródło dochodu </a></p>
+
+{% endblock main_block %}

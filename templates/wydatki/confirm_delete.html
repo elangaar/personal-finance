@@ -1,5 +1,7 @@
 {% extends "wydatki/base_delete.html" %}
 
+{% block title %} Usuń {{ object }} {% endblock title %}
+
 {% block delete_form %}
     <form action="" method="post"> {% csrf_token %}   
         <h5 class="mb-4">Usuwanie</h5>

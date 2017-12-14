@@ -27,7 +27,6 @@ th, td {
     </tr>
   </thead>
   <tbody>
-
     {% for e in expense_list %}
     <tr>
       <td><b>{{ e.name }}</b></td>
@@ -38,12 +37,11 @@ th, td {
       <td>{{ e.price }}</td>
       <td><a class="btn btn-outline-warning btn-sm" href="{% url 'expense-update' e.pk %}"> Edytuj </a></td>
       <td><a class="btn btn-outline-danger btn-sm" href="{% url 'expense-delete' e.pk %}"> Usuń </a></td>
-
     </tr>
     {% empty %}
         <p>Brak wydatków</p>
 
-{% endfor %}
+    {% endfor %}
   </tbody>
 </table>
 
@@ -67,12 +65,11 @@ th, td {
                 <li class="disabled"><span>&raquo;</span></li>
             {% endif %}
         </ul>
-
     {% endif %}
 	<hr noshade>
 	<p> Suma wydatków: {{ sum|floatformat:2 }} </p>
 
-<p><a class="btn btn-outline-primary btn-sm" href="{% url 'expense-add' %}"> Dodaj wydatek </a></p>
+<a class="btn btn-outline-primary btn-sm" href="{% url 'expense-add' %}"> Dodaj wydatek </a>
 
 {% endblock main_block %}
 

@@ -1,14 +1,43 @@
 {% extends "base_main.html" %}
 
-{% block title %} Lista przypomnień {% endblock title %} 
+{% block title %} Przypomnienia {% endblock title %} 
 
-{% block content %}
-	<h1> Lista przypomnień </h1>
-	{% for e in object_list %}
-		<p><a href="{{ e.get_absolute_url }}"> {{ e.name }} </a></p>
-	{% empty %}
-		<p> Brak przypomnień </p>
-	{% endfor %}
+{% block head_extra %}
+<style>
+th, td {
+    font-size: 90%;
+}
+</style>
+{% endblock head_extra %}
+
+{% block main_block %}
+	<h4> Przypomnienia </h4>
+    <table class="table table-sm">
+      <thead>
+        <tr>
+          <th>Wiadomość</th>
+          <th>Data przypomnienia</th>
+          <th>Data wykonania</th>
+          <th>Priorytet</th>
+          <th> </th>
+          <th> </th>
+        </tr>
+      </thead>
+      <tbody>
+	    {% for e in object_list %}
+        <tr> 
+            <td><b>{{ e.message }} </b></td>
+            <td> {{ e.as_before }} </td>
+            <td> {{ e.remind_date }} </td>
+            <td> {{ e.importance }} </td>
+            <td><a class="btn btn-outline-warning btn-sm" href="{% url 'reminder-update' e.pk %}"> Edytuj </a></td>
+            <td><a class="btn btn-outline-danger btn-sm" href="{% url 'reminder-delete' e.pk %}"> Usuń </a></td>
+        {% empty %}
+                <p> Brak przypomnień </p>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
     {% if is_paginated %}
         <ul class="pagination">
@@ -34,5 +63,8 @@
     {% endif %}
 	<hr noshade>
 	<p> Ilość przypomnień: {{ amount }} </p>
-	<a href="{% url 'reminder-add' %}"> Dodaj przypomnienie</a></br>
-{% endblock content %}
+
+
+    <a class="btn btn-outline-primary btn-sm" href="{% url 'reminder-add' %}"> Dodaj przypominenie </a>
+
+{% endblock main_block%}

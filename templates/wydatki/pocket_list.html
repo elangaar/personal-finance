@@ -1,15 +1,38 @@
 {% extends "base_main.html" %}
 
-{% block title %} Lista portfeli {% endblock title %} 
+{% block title %} Portfele {% endblock title %}
 
-{% block content %}
-	<h1> Lista portfeli </h1>
-	{% for e in object_list %}
-	<p> <a href="{{ e.get_absolute_url }}"> {{ e.name }}</a></p>
-	{% empty %}
-		<p> Brak portfeli </p>
-	{% endfor %}
+{% block head_extra %}
+<style>
+th, td {
+    font-size: 90%;
+}
+</style>
+{% endblock head_extra %}
 
+{% block main_block %}
+	<h4> Portfele </h4>
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th> Nazwa </th>
+                <th> Dostępne środki </th>
+                <th> </th>
+                <th> </th>
+        </thead>
+        <tbody>
+            <tr>
+                {% for e in object_list %}
+                    <td><b>{{ e.name }} </b></td>
+                    <td>{{ e.funds }} </td>
+                    <td><a class="btn btn-outline-warning btn-sm" href="{% url 'pocket-update' e.pk %}"> Edytuj </a></td>
+                    <td><a class="btn btn-outline-danger btn-sm" href="{% url 'pocket-delete' e.pk %}"> Usuń </a></td>
+            </tr>
+            {% empty %}
+                <p> Brak portfeli </p>
+            {% endfor %}
+        </tbody>
+    </table>
     {% if is_paginated %}
         <ul class="pagination">
             {% if page_obj.has_previous %}
@@ -34,36 +57,10 @@
     {% endif %}
 	<hr noshade>
 	<p> Ilość portfeli: {{ amount }} </p>
-	<a id='pocket-add' href="{% url 'pocket-add' %}"> Dodaj portfel</a></br>
-
 	
 
-    <a data-toggle="modal" data-target="#modal"> Dodaj portfel </a> 
-
-
-	<div class="modal fade" id="modal">
-	<div class="modal-dialog" role="document">
-	     <div class="modal-content">
-		 <div class="modal-header">
-		     <button type="button" class="close" data-dismiss="modal" aria-label="Close"> 
-			     <span aria-hidden="true">×</span> <span class="sr-only">Close</span> </button>
-		     <h4 class="modal-title">Dodaj nowy portfel</h4>
-		 </div>
-		 <div class="modal-body">
-
-            	 </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <input type="submit" class="btn btn-primary" value="Save changes" />
-            </div>
-        </div><!-- /.modal-content -->
-	</div>
-</div>
-<script>
-$('.modal-body').load("{% url 'pocket-add' %}", function() {
-});
+    <p><a class="btn btn-outline-primary btn-sm" href="{% url 'pocket-add' %}" > Dodaj portfel </a></p>
 
 
 
-</script>
-{% endblock content %}
+{% endblock main_block %}

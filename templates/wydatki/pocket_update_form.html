@@ -1,9 +1,5 @@
-{% extends "base.html" %}
+{% extends "wydatki/base_form.html" %}
 
-{% block content %}
-<form action="" method="post">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Submit" />
-</form>
-{% endblock content %}
+{% block title %} Edytuj portfel {{ object }} {% endblock title %}
+
+{% block header %} Edytuj portfel {% endblock header %}
